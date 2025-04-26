@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Kunshi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo"><img src="images/Other images/logo.png" alt="Logo" class="logo-img"></a>
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#about">About</a>
+                    <a href="index.html#skills">Skills</a>
+                    <a href="index.html#featured">Featured</a>
+                    <a href="portfolio.html" class="active">Portfolio</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Portfolio Hero Section Removed -->
+
+    <!-- Portfolio Filter Section -->
+    <section class="portfolio-filter-section">
+        <div class="container">
+            <div class="section-header portfolio-header">
+                <h2>Explore My Work</h2>
+                <p class="section-subtitle">Filter by category to find specific projects</p>
+            </div>
+            
+            <div class="filter-container">
+                <div class="portfolio-filters">
+                    <button class="filter-btn active" data-filter="all">All Projects</button>
+                    <button class="filter-btn" data-filter="Car-Brand-Insta-Post">Car Brand</button>
+                    <button class="filter-btn" data-filter="Print-Brand-Insta-Post">Print Brand</button>
+                    <button class="filter-btn" data-filter="Camera-Brand-Insta-Post">Camera Brand</button>
+                    <button class="filter-btn" data-filter="Facebook-Banners">Facebook Banners</button>
+                    <button class="filter-btn" data-filter="Hotel-Menu">Hotel Menu</button>
+                    <button class="filter-btn" data-filter="A4-size-Posters">A4 Posters</button>
+                    <button class="filter-btn" data-filter="Restaurant-Insta-Post">Restaurant</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Grid -->
+    <section class="portfolio-grid-section">
+        <div class="container">
+            <div class="portfolio-grid" id="portfolioGrid">
+                <!-- Loading state -->
+                <div class="portfolio-item" data-category="loading">
+                    <div class="portfolio-image">
+                        <div class="loading-container">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Loading amazing projects...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Empty state (will be shown/hidden via JS) -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>No projects found</h3>
+                <p>No projects match your current filter. Try selecting a different category.</p>
+                <button class="btn btn-primary reset-filter-btn">Show All Projects</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Modal -->
+    <div class="project-modal" id="projectModal">
+        <div class="modal-content">
+            <span class="close-modal" title="Close Image">&times;</span>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be loaded dynamically -->
+            </div>
+            <div class="modal-navigation">
+                <button class="nav-btn prev-btn" id="prevProject">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn next-btn" id="nextProject">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <section class="portfolio-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Start Your Project?</h2>
+                <p>Let's collaborate to bring your creative vision to life with stunning designs.</p>
+                <a href="index.html#contact" class="btn">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html"><img src="images/Other images/logo.png" alt="Logo" class="footer-logo-img"></a>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#about">About</a>
+                    <a href="index.html#skills">Skills</a>
+                    <a href="portfolio.html">Portfolio</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2025 Kunshi. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Portfolio items data structure
+        const portfolioData = {
+            'Car-Brand-Insta-Post': {
+                folderName: 'Car Brand Insta Post',
+                count: 21,
+                title: 'Car Brand',
+                description: 'Instagram post designs for automotive brands'
+            },
+            'Print-Brand-Insta-Post': {
+                folderName: 'Print Brand Insta Post',
+                count: 10,
+                title: 'Print Brand',
+                description: 'Instagram post designs for print services'
+            },
+            'Camera-Brand-Insta-Post': {
+                folderName: 'Camera Brand Insta Post',
+                count: 15,
+                title: 'Camera Brand',
+                description: 'Instagram post designs for photography equipment'
+            },
+            'Facebook-Banners': {
+                folderName: 'Facebook Banners',
+                count: 3,
+                title: 'Facebook Banners',
+                description: 'Custom designed social media banners'
+            },
+            'Hotel-Menu': {
+                folderName: 'Hotel Menu',
+                count: 2,
+                title: 'Hotel Menu',
+                description: 'Menu design for hospitality industry'
+            },
+            'A4-size-Posters': {
+                folderName: 'A4 size Posters',
+                count: 3,
+                title: 'A4 Posters',
+                description: 'Print-ready promotional poster designs'
+            },
+            'Restaurant-Insta-Post': {
+                folderName: 'Restaurant Insta Post',
+                count: 19,
+                title: 'Restaurant',
+                description: 'Instagram post designs for food services'
+            }
+        };
+
+        // Configuration variables
+        let baseImagePath = 'images/';
+        let imageExtension = '.png';
+        let currentCategory = 'all';
+        let currentImageIndex = 0;
+        let visibleItems = [];
+
+        // Function to generate portfolio items
+        function generatePortfolioItems() {
+            const portfolioGrid = document.getElementById('portfolioGrid');
+            portfolioGrid.innerHTML = ''; // Clear existing items
+            
+            console.log(`Generating portfolio with base path: ${baseImagePath} and extension: ${imageExtension}`);
+            
+            let totalItems = 0;
+            
+            // Loop through categories
+            for (const category in portfolioData) {
+                const { folderName, count, title, description } = portfolioData[category];
+                totalItems += count;
+                
+                // Generate items for each category
+                for (let i = 1; i <= count; i++) {
+                    const imagePath = `${baseImagePath}${folderName}/Post (${i})${imageExtension}`;
+                    
+                    const portfolioItem = document.createElement('div');
+                    portfolioItem.className = 'portfolio-item';
+                    portfolioItem.setAttribute('data-category', category);
+                    portfolioItem.setAttribute('data-index', totalItems - count + i - 1);
+                    
+                    portfolioItem.innerHTML = `
+                        <div class="portfolio-image" data-image="${imagePath}" data-title="${title} #${i}" data-category="${category.replace(/-/g, ' ')}">
+                            <img src="${imagePath}" alt="${title} Design ${i}" 
+                                 onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f8f8f8;\\'><div style=\\'text-align:center;padding:20px;\\'><div style=\\'font-size:16px;margin-bottom:5px;color:#333;\\'>${title} #${i}</div><div style=\\'font-size:12px;color:#777;\\'>Image not found</div></div></div>';">
+                        </div>
+                    `;
+                    
+                    portfolioGrid.appendChild(portfolioItem);
+                }
+            }
+            
+            // Total items count (kept for internal use)
+            console.log(`Total projects: ${totalItems}`);
+            
+            // Add event listeners to portfolio images
+            document.querySelectorAll('.portfolio-image').forEach(image => {
+                image.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const imageSrc = this.getAttribute('data-image');
+                    const itemIndex = parseInt(this.parentNode.getAttribute('data-index'));
+                    openModal(imageSrc, this.getAttribute('data-title'), this.getAttribute('data-category'), itemIndex);
+                });
+            });
+
+            // Save settings to localStorage if images load successfully
+            verifyImagesLoaded();
+            
+            // Initial filter to show all projects
+            filterPortfolio('all');
+        }
+
+        // Verify if at least one image loads successfully
+        function verifyImagesLoaded() {
+            setTimeout(() => {
+                const images = document.querySelectorAll('.portfolio-item img');
+                let loadedCount = 0;
+                
+                images.forEach(img => {
+                    if (img.complete && img.naturalHeight !== 0) {
+                        loadedCount++;
+                    }
+                });
+                
+                if (loadedCount > 0) {
+                    console.log(`${loadedCount} images loaded successfully!`);
+                    // Save settings to localStorage
+                    localStorage.setItem('portfolioBaseImagePath', baseImagePath);
+                    localStorage.setItem('portfolioImageExtension', imageExtension);
+                } else {
+                    console.log('No images loaded successfully. Please check your paths.');
+                }
+            }, 2000);
+        }
+
+        // Filter function
+        function filterPortfolio(category) {
+            const items = document.querySelectorAll('.portfolio-item');
+            const emptyState = document.getElementById('emptyState');
+            
+            currentCategory = category;
+            visibleItems = [];
+            let visibleCount = 0;
+            
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                    visibleItems.push(item);
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Visible items count (kept for internal use)
+            console.log(`Visible projects: ${visibleCount}`);
+            
+            // Show/hide empty state
+            if (visibleCount === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+        }
+
+        // Modal functions
+        function openModal(imageSrc, title, category, itemIndex) {
+            const modal = document.getElementById('projectModal');
+            const modalBody = document.getElementById('modalBody');
+            const prevBtn = document.getElementById('prevProject');
+            const nextBtn = document.getElementById('nextProject');
+            
+            currentImageIndex = itemIndex;
+            
+            // Set the category as a data attribute on the modal body for special styling
+            modalBody.setAttribute('data-category', category.replace(/ /g, '-'));
+            
+            updateModalContent(imageSrc, title);
+            
+            modal.style.display = 'flex';
+            
+            // Setup navigation buttons
+            setupModalNavigation(prevBtn, nextBtn);
+            
+            // Close modal when clicking the X
+            const closeButton = document.querySelector('.close-modal');
+            closeButton.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Close modal when pressing Escape key
+            window.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    modal.style.display = 'none';
+                }
+                
+                // Navigate with arrow keys
+                if (modal.style.display === 'flex') {
+                    if (e.key === 'ArrowRight') {
+                        navigateToNextItem();
+                    } else if (e.key === 'ArrowLeft') {
+                        navigateToPrevItem();
+                    }
+                }
+            });
+        }
+        
+        function updateModalContent(imageSrc, title) {
+            const modalBody = document.getElementById('modalBody');
+            const category = modalBody.getAttribute('data-category');
+            
+            // Determine if this is an A4 poster for special handling
+            const isA4Poster = category === 'A4-size-Posters';
+            
+            modalBody.innerHTML = `
+                <div class="modal-image">
+                    <img src="${imageSrc}" alt="${title}" 
+                         ${isA4Poster ? 'class="a4-poster"' : ''}
+                         onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;background:#f0f0f0;\\'><div style=\\'text-align:center;padding:20px;\\'><div style=\\'font-size:18px;color:#666;margin-bottom:10px;\\'>Image could not be loaded</div><div style=\\'font-size:14px;color:#999;\\'>Please try again later</div></div></div>';">
+                </div>
+                <div class="modal-title">${title}</div>
+            `;
+        }
+        
+        function setupModalNavigation(prevBtn, nextBtn) {
+            // Remove existing event listeners
+            prevBtn.replaceWith(prevBtn.cloneNode(true));
+            nextBtn.replaceWith(nextBtn.cloneNode(true));
+            
+            // Get fresh references
+            const newPrevBtn = document.getElementById('prevProject');
+            const newNextBtn = document.getElementById('nextProject');
+            
+            // Add new event listeners
+            newPrevBtn.addEventListener('click', navigateToPrevItem);
+            newNextBtn.addEventListener('click', navigateToNextItem);
+        }
+        
+        function navigateToPrevItem() {
+            if (visibleItems.length === 0) return;
+            
+            currentImageIndex = (currentImageIndex - 1 + visibleItems.length) % visibleItems.length;
+            navigateToItem(currentImageIndex);
+        }
+        
+        function navigateToNextItem() {
+            if (visibleItems.length === 0) return;
+            
+            currentImageIndex = (currentImageIndex + 1) % visibleItems.length;
+            navigateToItem(currentImageIndex);
+        }
+        
+        function navigateToItem(index) {
+            const item = visibleItems[index];
+            if (!item) return;
+            
+            const portfolioImage = item.querySelector('.portfolio-image');
+            const imageSrc = portfolioImage.getAttribute('data-image');
+            const title = portfolioImage.getAttribute('data-title');
+            
+            updateModalContent(imageSrc, title);
+        }
+
+        // Load settings from localStorage if available
+        function loadStoredSettings() {
+            const storedPath = localStorage.getItem('portfolioBaseImagePath');
+            const storedExtension = localStorage.getItem('portfolioImageExtension');
+            
+            if (storedPath) {
+                baseImagePath = storedPath;
+            }
+            
+            if (storedExtension) {
+                imageExtension = storedExtension;
+            }
+        }
+
+        // Mobile menu toggle
+        function setupMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    
+                    // Toggle between hamburger and close icon
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('fa-bars')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            // Close menu when clicking a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                    
+                    // Reset icon
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+        }
+
+        // Initialize the portfolio
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup mobile menu
+            setupMobileMenu();
+            
+            // Load stored settings if available
+            loadStoredSettings();
+            
+            // Generate portfolio items with initial settings
+            generatePortfolioItems();
+            
+            // Add event listeners to filter buttons
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Filter portfolio
+                    filterPortfolio(this.getAttribute('data-filter'));
+                });
+            });
+            
+            // Add event listener to reset filter button
+            document.querySelector('.reset-filter-btn').addEventListener('click', function() {
+                // Reset to "All Projects" filter
+                const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+                allButton.click();
+            });
+        });
+    </script>
+</body>
+</html>
