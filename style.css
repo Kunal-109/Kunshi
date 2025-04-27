@@ -259,8 +259,21 @@ nav {
     transition: transform 0.3s ease;
 }
 
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-left: 10px;
+    letter-spacing: 0.5px;
+    transition: var(--transition);
+}
+
 .logo:hover .logo-img {
     transform: scale(1.05);
+}
+
+.logo:hover .logo-text {
+    color: var(--accent-color);
 }
 
 .nav-links {
