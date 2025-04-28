@@ -455,7 +455,14 @@
             <div class="contact-form-container">
                 <div class="contact-form">
                     <h3>Send Me a Message</h3>
-                    <form id="contactForm">
+                    <!-- 
+                        IMPORTANT: Replace "xpzvgvnj" below with your actual Formspree form ID
+                        1. Go to formspree.io and create an account
+                        2. Create a new form and connect it to Kunshi.agency@gmail.com
+                        3. Copy the form ID from the endpoint URL (looks like: xsomeletters)
+                        4. Replace xpzvgvnj with your actual form ID
+                    -->
+                    <form id="contactForm" action="https://formspree.io/f/manonrne" method="POST">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Name</label>
@@ -474,7 +481,12 @@
                             <label for="message">Message</label>
                             <textarea id="message" name="message" rows="5" placeholder="Tell me about your project..." required></textarea>
                         </div>
+                        <!-- Honeypot field to prevent spam -->
+                        <input type="text" name="_gotcha" style="display:none">
+                        <!-- Custom redirect after submission -->
+                        <input type="hidden" name="_next" value="https://kunshi.vercel.app/thank-you">
                         <button type="submit" class="btn btn-primary">Send Message</button>
+                        <div id="form-status" class="form-status"></div>
                     </form>
                 </div>
             </div>
@@ -506,5 +518,6 @@
     <script src="typing-animation.js"></script>
     <script src="image-protection.js"></script>
     <script src="smooth-navigation.js"></script>
+    <script src="contact-form.js"></script>
 </body>
 </html>
