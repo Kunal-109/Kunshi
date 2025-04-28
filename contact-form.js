@@ -9,53 +9,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!contactForm) return;
     
-    // Add CSS for form status messages
-    const style = document.createElement('style');
-    style.textContent = `
-        .form-status {
-            margin: 1.5rem auto 0;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            display: none;
-            text-align: center;
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-            line-height: 1.5;
-            font-size: 1rem;
-        }
-        
-        .form-status.success {
-            display: block;
-            background-color: rgba(52, 211, 153, 0.1);
-            color: #10b981;
-            border: 1px solid rgba(52, 211, 153, 0.2);
-        }
-        
-        .form-status.error {
-            display: block;
-            background-color: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-        
-        .form-status.loading {
-            display: block;
-            background-color: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-    `;
-    document.head.appendChild(style);
+    // We're now using inline styles for form status messages
     
     // Handle form submission
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Show loading message
+        // Show loading message with inline styles
         formStatus.className = 'form-status loading';
-        formStatus.innerHTML = '<strong>Sending your message...</strong><br>Please wait while we process your submission.';
+        formStatus.style.display = 'block';
+        formStatus.style.width = '100%';
+        formStatus.style.textAlign = 'center';
+        formStatus.style.margin = '20px auto 0';
+        formStatus.style.padding = '15px';
+        formStatus.style.borderRadius = '8px';
+        formStatus.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+        formStatus.style.color = '#3b82f6';
+        formStatus.style.border = '1px solid rgba(59, 130, 246, 0.2)';
+        formStatus.innerHTML = '<strong style="display: block; margin-bottom: 5px; font-size: 16px;">Sending your message...</strong><span>Please wait while we process your submission.</span>';
         
         // Get form data
         const formData = new FormData(contactForm);
@@ -73,7 +44,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Success - clear form and show success message
                 contactForm.reset();
                 formStatus.className = 'form-status success';
-                formStatus.innerHTML = '<strong>Thank you for your message!</strong><br>I\'ve received your inquiry and will get back to you as soon as possible, usually within 24-48 hours.';
+                formStatus.style.display = 'block';
+                formStatus.style.width = '100%';
+                formStatus.style.textAlign = 'center';
+                formStatus.style.margin = '20px auto 0';
+                formStatus.style.padding = '15px';
+                formStatus.style.borderRadius = '8px';
+                formStatus.style.backgroundColor = 'rgba(52, 211, 153, 0.1)';
+                formStatus.style.color = '#10b981';
+                formStatus.style.border = '1px solid rgba(52, 211, 153, 0.2)';
+                formStatus.innerHTML = '<strong style="display: block; margin-bottom: 5px; font-size: 16px;">Thank you for your message!</strong><span>I\'ve received your inquiry and will get back to you as soon as possible, usually within 24-48 hours.</span>';
                 
                 // Redirect to thank you page after a delay (3.5 seconds)
                 setTimeout(() => {
@@ -87,7 +67,16 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Error:', error);
             formStatus.className = 'form-status error';
-            formStatus.innerHTML = '<strong>Oops! Something went wrong.</strong><br>There was a problem sending your message. Please try again or contact me directly at <a href="mailto:Kunshi.agency@gmail.com">Kunshi.agency@gmail.com</a>';
+            formStatus.style.display = 'block';
+            formStatus.style.width = '100%';
+            formStatus.style.textAlign = 'center';
+            formStatus.style.margin = '20px auto 0';
+            formStatus.style.padding = '15px';
+            formStatus.style.borderRadius = '8px';
+            formStatus.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+            formStatus.style.color = '#ef4444';
+            formStatus.style.border = '1px solid rgba(239, 68, 68, 0.2)';
+            formStatus.innerHTML = '<strong style="display: block; margin-bottom: 5px; font-size: 16px;">Oops! Something went wrong.</strong><span>There was a problem sending your message. Please try again or contact me directly at <a href="mailto:Kunshi.agency@gmail.com" style="color: inherit; text-decoration: underline;">Kunshi.agency@gmail.com</a></span>';
         });
     });
 });
