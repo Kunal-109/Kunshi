@@ -3331,3 +3331,50 @@ footer {
 .tool-card:hover .tool-icon.adobe-photoshop::after {
     color: white;
 }
+
+/* Form status messages */
+.form-status {
+    margin: 1.5rem auto 0;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    display: none;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.form-status.success {
+    display: block;
+    background-color: rgba(52, 211, 153, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.form-status.error {
+    display: block;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.form-status.loading {
+    display: block;
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.form-status strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.form-status a {
+    color: inherit;
+    text-decoration: underline;
+}

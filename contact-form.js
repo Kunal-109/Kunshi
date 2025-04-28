@@ -13,11 +13,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const style = document.createElement('style');
     style.textContent = `
         .form-status {
-            margin-top: 1rem;
-            padding: 0.75rem;
+            margin: 1.5rem auto 0;
+            padding: 1rem;
             border-radius: 0.5rem;
             font-weight: 500;
             display: none;
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            line-height: 1.5;
+            font-size: 1rem;
         }
         
         .form-status.success {
@@ -49,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show loading message
         formStatus.className = 'form-status loading';
-        formStatus.textContent = 'Sending your message...';
+        formStatus.innerHTML = '<strong>Sending your message...</strong><br>Please wait while we process your submission.';
         
         // Get form data
         const formData = new FormData(contactForm);
@@ -67,12 +73,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Success - clear form and show success message
                 contactForm.reset();
                 formStatus.className = 'form-status success';
-                formStatus.textContent = 'Message sent successfully! I\'ll get back to you soon.';
+                formStatus.innerHTML = '<strong>Thank you for your message!</strong><br>I\'ve received your inquiry and will get back to you as soon as possible, usually within 24-48 hours.';
                 
-                // Redirect to thank you page after a short delay
+                // Redirect to thank you page after a delay (3.5 seconds)
                 setTimeout(() => {
                     window.location.href = formData.get('_next') || '/thank-you';
-                }, 2000);
+                }, 3500);
             } else {
                 // Error - show error message
                 throw new Error('Form submission failed');
@@ -81,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Error:', error);
             formStatus.className = 'form-status error';
-            formStatus.textContent = 'Oops! There was a problem sending your message. Please try again or contact me directly at Kunshi.agency@gmail.com';
+            formStatus.innerHTML = '<strong>Oops! Something went wrong.</strong><br>There was a problem sending your message. Please try again or contact me directly at <a href="mailto:Kunshi.agency@gmail.com">Kunshi.agency@gmail.com</a>';
         });
     });
 });
