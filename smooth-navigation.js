@@ -1,60 +1,44 @@
 /**
  * Smooth Navigation Script
- * Handles clean URL navigation without hash fragments
+ * Handles smooth scrolling for anchor links
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Get current path
-    const currentPath = window.location.pathname;
-    
-    // Handle section navigation
-    function navigateToSection(sectionId) {
-        const section = document.getElementById(sectionId);
-        if (section) {
-            window.scrollTo({
-                top: section.offsetTop - 80, // Adjust for header height
-                behavior: 'smooth'
-            });
-        } else if (currentPath !== '/') {
-            // If we're not on the homepage, redirect to the homepage with the section
-            window.location.href = '/' + (sectionId ? '?section=' + sectionId : '');
-        }
-    }
-    
-    // Check for section parameter in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const sectionParam = urlParams.get('section');
-    
-    if (sectionParam) {
-        // Remove the query parameter from URL without reloading
-        const newUrl = window.location.pathname;
-        window.history.replaceState({}, document.title, newUrl);
-        
-        // Navigate to the section after a short delay to allow page to load
-        setTimeout(() => {
-            navigateToSection(sectionParam);
-        }, 100);
-    }
-    
-    // Handle clean URL navigation
-    document.querySelectorAll('a[href^="/"]').forEach(link => {
-        const href = link.getAttribute('href');
-        
-        // Skip links that are just the root or have additional path segments
-        if (href === '/' || href.indexOf('/', 1) !== -1) {
-            return;
-        }
-        
-        // For section links like /about, /skills, etc.
-        const sectionId = href.substring(1); // Remove the leading slash
-        
-        link.addEventListener('click', function(e) {
-            // If we're on the homepage, scroll to the section
-            if (currentPath === '/' || currentPath === '/index.html') {
-                e.preventDefault();
-                navigateToSection(sectionId);
+    // Handle smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                // Smooth scroll to the element
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80, // Adjust for header height
+                    behavior: 'smooth'
+                });
+                
+                // Update URL hash without jumping
+                history.pushState(null, null, '#' + targetId);
             }
-            // Otherwise, the default behavior will navigate to the homepage with the section parameter
         });
     });
+    
+    // Handle initial hash in URL
+    if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            // Delay scrolling slightly to ensure page is fully loaded
+            setTimeout(() => {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+    }
+});
 });

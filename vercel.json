@@ -1,0 +1,24 @@
+{
+  "rewrites": [
+    { "source": "/portfolio", "destination": "/portfolio.html" },
+    { "source": "/about", "destination": "/#about" },
+    { "source": "/skills", "destination": "/#skills" },
+    { "source": "/featured", "destination": "/#featured" },
+    { "source": "/contact", "destination": "/#contact" }
+  ],
+  "headers": [
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
+  ]
+}
