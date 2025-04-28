@@ -455,7 +455,7 @@
             <div class="contact-form-container">
                 <div class="contact-form">
                     <h3>Send Me a Message</h3>
-                    <!-- Simple contact form without Formspree -->
+                    <!-- Basic contact form -->
                     <form id="contactForm" action="javascript:void(0);" method="POST">
                         <div class="form-row">
                             <div class="form-group">
@@ -475,11 +475,9 @@
                             <label for="message">Message</label>
                             <textarea id="message" name="message" rows="5" placeholder="Tell me about your project..." required></textarea>
                         </div>
-                        <!-- No honeypot needed since we're not using Formspree -->
                         <button type="submit" class="btn btn-primary">Send Message</button>
-                        
-                        <!-- The notification will be inserted here by JavaScript -->
-                        <div style="width:100%; min-height:80px;"></div>
+                    </form>
+                    <!-- Thank you message will be inserted after the form -->
                     </form>
                 </div>
             </div>
@@ -511,6 +509,6 @@
     <script src="typing-animation.js"></script>
     <script src="image-protection.js"></script>
     <script src="smooth-navigation.js"></script>
-    <script src="simple-form.js"></script>
+    <script src="basic-form.js"></script>
 </body>
 </html>
