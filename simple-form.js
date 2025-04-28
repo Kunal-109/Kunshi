@@ -48,12 +48,13 @@ document.addEventListener('DOMContentLoaded', function() {
             notification.style.backgroundColor = 'rgba(52, 211, 153, 0.1)';
             notification.style.color = '#10b981';
             notification.style.border = '1px solid rgba(52, 211, 153, 0.2)';
-            notification.innerHTML = '<div style="font-weight:bold; margin-bottom:5px; font-size:16px;">Thank you for your message!</div><div style="white-space:normal; word-wrap:break-word;">I\'ve received your inquiry and will get back to you as soon as possible, usually within 24-48 hours.</div>';
+            notification.innerHTML = '<div style="font-weight:bold; margin-bottom:5px; font-size:16px;">Thank you for your message!</div><div style="white-space:normal; word-wrap:break-word;">I\'ve received your inquiry and will get back to you as soon as possible, usually within 24-48 hours.</div><div style="margin-top:15px;"><a href="thank-you.html" style="display:inline-block; padding:8px 16px; background-color:#10b981; color:white; text-decoration:none; border-radius:4px; font-weight:bold;">Continue to Thank You Page</a></div>';
             
-            // Redirect after delay
-            setTimeout(() => {
-                window.location.href = 'thank-you.html';
-            }, 3000);
+            // Add a manual redirect button instead of automatic redirection
+            console.log('Form submitted successfully');
+            
+            // We'll rely on the manual button instead of automatic redirection
+            // as automatic redirection might be blocked by browsers
         }, 1500);
     });
 });
