@@ -3,6 +3,15 @@
   Main Stylesheet
 */
 
+/* Image Protection Styles */
+img {
+    pointer-events: none; /* Prevents right-click and drag events */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /* GLOBAL STYLES
 --------------------------------------------------------- */
 :root {

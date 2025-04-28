@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Kunshi</title>
-    <link rel="icon" href="images/Other images/logo.jpg" type="image/jpg">
+    <title>Kunshi | Illuminate your Brand</title>
+    <link rel="icon" href="images/Other images/logo.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <meta name="robots" content="noindex,nofollow">
+    <meta http-equiv="Content-Security-Policy" content="img-src 'self'">
 </head>
 <body>
     <!-- Header -->
     <header>
         <div class="container">
             <nav>
-                <a href="index.html" class="logo">
-                    <img src="images/Other images/logo.jpg" alt="Logo" class="logo-img">
+                <a href="/" class="logo">
+                    <img src="images/Other images/logo.png" alt="Logo" class="logo-img">
                     <span class="logo-text">Kunshi</span>
                 </a>
                 <div class="nav-links" id="navLinks">
-                    <a href="index.html">Home</a>
-                    <a href="index.html#about">About</a>
-                    <a href="index.html#skills">Skills</a>
-                    <a href="index.html#featured">Featured</a>
-                    <a href="portfolio.html" class="active">Portfolio</a>
-                    <a href="index.html#contact">Contact</a>
+                    <a href="/">Home</a>
+                    <a href="/about">About</a>
+                    <a href="/skills">Skills</a>
+                    <a href="/featured">Featured</a>
+                    <a href="/portfolio" class="active">Portfolio</a>
+                    <a href="/contact">Contact</a>
                 </div>
                 <div class="menu-toggle" id="menuToggle">
                     <i class="fas fa-bars"></i>
@@ -31,8 +33,6 @@
             </nav>
         </div>
     </header>
-
-    <!-- Portfolio Hero Section Removed -->
 
     <!-- Portfolio Filter Section -->
     <section class="portfolio-filter-section">
@@ -108,7 +108,7 @@
             <div class="cta-content">
                 <h2>Ready to Start Your Project?</h2>
                 <p>Let's collaborate to bring your creative vision to life with stunning designs.</p>
-                <a href="index.html#contact" class="btn">Get In Touch</a>
+                <a href="/contact" class="btn">Get In Touch</a>
             </div>
         </div>
     </section>
@@ -118,14 +118,14 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <a href="index.html"><img src="images/Other images/logo.jpg" alt="Logo" class="footer-logo-img"></a>
+                    <a href="/"><img src="images/Other images/logo.png" alt="Logo" class="footer-logo-img"></a>
                 </div>
                 <div class="footer-links">
-                    <a href="index.html">Home</a>
-                    <a href="index.html#about">About</a>
-                    <a href="index.html#skills">Skills</a>
-                    <a href="portfolio.html">Portfolio</a>
-                    <a href="index.html#contact">Contact</a>
+                    <a href="/">Home</a>
+                    <a href="/about">About</a>
+                    <a href="/skills">Skills</a>
+                    <a href="/portfolio">Portfolio</a>
+                    <a href="/contact">Contact</a>
                 </div>
                 <div class="footer-copyright">
                     <p>&copy; 2025 Kunshi. All rights reserved.</p>
@@ -135,6 +135,14 @@
     </footer>
 
     <script>
+        // Debug function to check image existence
+        function checkImageExists(url, callback) {
+            const img = new Image();
+            img.onload = function() { callback(true); };
+            img.onerror = function() { callback(false); };
+            img.src = url;
+        }
+        
         // Portfolio items data structure
         const portfolioData = {
             'Car-Brand-Insta-Post': {
@@ -183,11 +191,20 @@
 
         // Configuration variables
         let baseImagePath = 'images/';
-        let imageExtension = '.jpg';
+        let imageExtension = '.jpg'; // Use .jpg for portfolio images
         let currentCategory = 'all';
         let currentImageIndex = 0;
         let visibleItems = [];
 
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        
         // Function to generate portfolio items
         function generatePortfolioItems() {
             const portfolioGrid = document.getElementById('portfolioGrid');
@@ -195,35 +212,59 @@
             
             console.log(`Generating portfolio with base path: ${baseImagePath} and extension: ${imageExtension}`);
             
+            // Debug: Check if portfolioGrid exists
+            if (!portfolioGrid) {
+                console.error('Portfolio grid element not found!');
+                return;
+            }
+            
+            // Create an array to hold all portfolio items before adding to DOM
+            let allPortfolioItems = [];
             let totalItems = 0;
             
             // Loop through categories
             for (const category in portfolioData) {
                 const { folderName, count, title, description } = portfolioData[category];
-                totalItems += count;
                 
-                // Generate items for each category
-                for (let i = 1; i <= count; i++) {
-                    const imagePath = `${baseImagePath}${folderName}/Post (${i})${imageExtension}`;
+                // Create an array of indices and shuffle them
+                let indices = Array.from({length: count}, (_, i) => i + 1);
+                indices = shuffleArray(indices);
+                
+                // Generate items for each category with shuffled indices
+                for (let i = 0; i < count; i++) {
+                    const shuffledIndex = indices[i];
+                    const imagePath = `${baseImagePath}${folderName}/Post (${shuffledIndex})${imageExtension}`;
+                    
+                    // Debug log to check image paths
+                    console.log(`Loading image: ${imagePath}`);
                     
                     const portfolioItem = document.createElement('div');
                     portfolioItem.className = 'portfolio-item';
                     portfolioItem.setAttribute('data-category', category);
-                    portfolioItem.setAttribute('data-index', totalItems - count + i - 1);
+                    portfolioItem.setAttribute('data-index', totalItems);
+                    totalItems++;
                     
                     portfolioItem.innerHTML = `
-                        <div class="portfolio-image" data-image="${imagePath}" data-title="${title} #${i}" data-category="${category.replace(/-/g, ' ')}">
-                            <img src="${imagePath}" alt="${title} Design ${i}" 
-                                 onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f8f8f8;\\'><div style=\\'text-align:center;padding:20px;\\'><div style=\\'font-size:16px;margin-bottom:5px;color:#333;\\'>${title} #${i}</div><div style=\\'font-size:12px;color:#777;\\'>Image not found</div></div></div>';">
+                        <div class="portfolio-image" data-image="${imagePath}" data-title="${title} #${shuffledIndex}" data-category="${category.replace(/-/g, ' ')}">
+                            <img src="${imagePath}" alt="${title} Design ${shuffledIndex}" 
+                                 onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f8f8f8;\\'><div style=\\'text-align:center;padding:20px;\\'><div style=\\'font-size:16px;margin-bottom:5px;color:#333;\\'>${title} #${shuffledIndex}</div><div style=\\'font-size:12px;color:#777;\\'>Image not found</div></div></div>';">
                         </div>
                     `;
                     
-                    portfolioGrid.appendChild(portfolioItem);
+                    allPortfolioItems.push(portfolioItem);
                 }
             }
             
             // Total items count (kept for internal use)
             console.log(`Total projects: ${totalItems}`);
+            
+            // Shuffle all portfolio items across categories for a completely random order
+            shuffleArray(allPortfolioItems);
+            
+            // Append all shuffled items to the grid
+            allPortfolioItems.forEach(item => {
+                portfolioGrid.appendChild(item);
+            });
             
             // Add event listeners to portfolio images
             document.querySelectorAll('.portfolio-image').forEach(image => {
@@ -247,20 +288,38 @@
             setTimeout(() => {
                 const images = document.querySelectorAll('.portfolio-item img');
                 let loadedCount = 0;
+                let failedCount = 0;
+                
+                console.log(`Checking ${images.length} images...`);
                 
                 images.forEach(img => {
                     if (img.complete && img.naturalHeight !== 0) {
                         loadedCount++;
+                    } else {
+                        failedCount++;
+                        console.error(`Failed to load image: ${img.src}`);
                     }
                 });
                 
                 if (loadedCount > 0) {
-                    console.log(`${loadedCount} images loaded successfully!`);
+                    console.log(`${loadedCount} images loaded successfully! ${failedCount} images failed.`);
                     // Save settings to localStorage
                     localStorage.setItem('portfolioBaseImagePath', baseImagePath);
                     localStorage.setItem('portfolioImageExtension', imageExtension);
                 } else {
-                    console.log('No images loaded successfully. Please check your paths.');
+                    console.error('No images loaded successfully. Please check your paths.');
+                    console.log('Trying alternative extension...');
+                    
+                    // Try alternative extension if all images failed
+                    if (imageExtension === '.jpg') {
+                        console.log('Switching from .jpg to .png');
+                        imageExtension = '.png';
+                        generatePortfolioItems();
+                    } else if (imageExtension === '.png') {
+                        console.log('Switching from .png to .jpg');
+                        imageExtension = '.jpg';
+                        generatePortfolioItems();
+                    }
                 }
             }, 2000);
         }
@@ -274,11 +333,21 @@
             visibleItems = [];
             let visibleCount = 0;
             
+            // First collect all visible items
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    visibleItems.push(item);
+                    visibleCount++;
+                }
+            });
+            
+            // Shuffle the visible items for a random order within the filter
+            shuffleArray(visibleItems);
+            
+            // Now display or hide items
             items.forEach(item => {
                 if (category === 'all' || item.getAttribute('data-category') === category) {
                     item.style.display = 'block';
-                    visibleItems.push(item);
-                    visibleCount++;
                 } else {
                     item.style.display = 'none';
                 }
@@ -470,8 +539,47 @@
                     // Add active class to clicked button
                     this.classList.add('active');
                     
-                    // Filter portfolio
-                    filterPortfolio(this.getAttribute('data-filter'));
+                    // Filter portfolio with the selected category
+                    const category = this.getAttribute('data-filter');
+                    
+                    // If it's the same category as current, reshuffle the items
+                    if (category === currentCategory) {
+                        // Reshuffle the visible items
+                        const portfolioGrid = document.getElementById('portfolioGrid');
+                        const items = Array.from(portfolioGrid.querySelectorAll('.portfolio-item[data-category="' + category + '"]'));
+                        
+                        if (category === 'all') {
+                            // For "all" category, shuffle all items
+                            const allItems = Array.from(portfolioGrid.querySelectorAll('.portfolio-item'));
+                            shuffleArray(allItems);
+                            
+                            // Remove all items
+                            while (portfolioGrid.firstChild) {
+                                portfolioGrid.removeChild(portfolioGrid.firstChild);
+                            }
+                            
+                            // Add them back in shuffled order
+                            allItems.forEach(item => {
+                                portfolioGrid.appendChild(item);
+                            });
+                        } else {
+                            // For specific category, shuffle only those items
+                            shuffleArray(items);
+                            
+                            // Remove those items
+                            items.forEach(item => {
+                                portfolioGrid.removeChild(item);
+                            });
+                            
+                            // Add them back in shuffled order
+                            items.forEach(item => {
+                                portfolioGrid.appendChild(item);
+                            });
+                        }
+                    }
+                    
+                    // Apply the filter
+                    filterPortfolio(category);
                 });
             });
             
@@ -483,5 +591,7 @@
             });
         });
     </script>
+    <script src="image-protection.js"></script>
+    <script src="smooth-navigation.js"></script>
 </body>
 </html>

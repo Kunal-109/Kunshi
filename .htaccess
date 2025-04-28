@@ -1,0 +1,41 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Remove .html extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [NC,L]
+
+# Handle index.html
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Redirect URLs with hash fragments to clean URLs
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\#([^\ ]+)\ HTTP/
+RewriteRule ^index\.html\#([^\ ]+)$ /%1 [R=301,L]
+
+# Prevent image hotlinking
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?yourdomain\.com [NC]
+RewriteRule \.(jpg|jpeg|png|gif)$ - [NC,F,L]
+
+# Set security headers
+<IfModule mod_headers.c>
+    # Prevent browsers from detecting the mimetype if not sent by the server
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Prevent embedding in iframes on other domains
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # Enable the XSS filter built into browsers
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Disable image right-click
+    Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Protect against DOS attacks by limiting file upload size
+LimitRequestBody 10240000
