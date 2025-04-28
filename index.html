@@ -455,13 +455,7 @@
             <div class="contact-form-container">
                 <div class="contact-form">
                     <h3>Send Me a Message</h3>
-                    <!-- 
-                        IMPORTANT: Replace "xpzvgvnj" below with your actual Formspree form ID
-                        1. Go to formspree.io and create an account
-                        2. Create a new form and connect it to Kunshi.agency@gmail.com
-                        3. Copy the form ID from the endpoint URL (looks like: xsomeletters)
-                        4. Replace xpzvgvnj with your actual form ID
-                    -->
+                    <!-- Simple contact form with Formspree integration -->
                     <form id="contactForm" action="https://formspree.io/f/manonrne" method="POST">
                         <div class="form-row">
                             <div class="form-group">
@@ -483,12 +477,9 @@
                         </div>
                         <!-- Honeypot field to prevent spam -->
                         <input type="text" name="_gotcha" style="display:none">
-                        <!-- Custom redirect after submission -->
-                        <input type="hidden" name="_next" value="https://kunshi.vercel.app/thank-you">
                         <button type="submit" class="btn btn-primary">Send Message</button>
                         
-                        <!-- Status message container with inline styles -->
-                        <div id="form-status" class="form-status" style="width: 100%; text-align: center; margin: 20px auto 0; display: none;"></div>
+                        <!-- The notification will be inserted here by JavaScript -->
                     </form>
                 </div>
             </div>
@@ -520,6 +511,6 @@
     <script src="typing-animation.js"></script>
     <script src="image-protection.js"></script>
     <script src="smooth-navigation.js"></script>
-    <script src="contact-form.js"></script>
+    <script src="simple-form.js"></script>
 </body>
 </html>
