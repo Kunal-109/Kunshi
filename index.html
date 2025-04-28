@@ -455,8 +455,8 @@
             <div class="contact-form-container">
                 <div class="contact-form">
                     <h3>Send Me a Message</h3>
-                    <!-- Simple contact form with Formspree integration -->
-                    <form id="contactForm" action="https://formspree.io/f/manonrne" method="POST">
+                    <!-- Simple contact form without Formspree -->
+                    <form id="contactForm" action="javascript:void(0);" method="POST">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Name</label>
@@ -475,11 +475,11 @@
                             <label for="message">Message</label>
                             <textarea id="message" name="message" rows="5" placeholder="Tell me about your project..." required></textarea>
                         </div>
-                        <!-- Honeypot field to prevent spam -->
-                        <input type="text" name="_gotcha" style="display:none">
+                        <!-- No honeypot needed since we're not using Formspree -->
                         <button type="submit" class="btn btn-primary">Send Message</button>
                         
                         <!-- The notification will be inserted here by JavaScript -->
+                        <div style="width:100%; min-height:80px;"></div>
                     </form>
                 </div>
             </div>
