@@ -11,6 +11,17 @@
     <meta http-equiv="Content-Security-Policy" content="img-src 'self'">
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <img src="images/Other images/logo.png" alt="Logo" class="loader-logo">
+            <div class="loader-text">LOADING...</div>
+        </div>
+    </div>
+    
     <!-- Header -->
     <header>
         <div class="container">
@@ -426,13 +437,13 @@
                     <div class="dm-section">
                         <h3>Direct Message Me</h3>
                         <div class="dm-links">
-                            <a href="https://ig.me/m/designer.kunshi?text=Hey!%20%F0%9F%91%8B%20I%20love%20your%20work.%20I%E2%80%99m%20looking%20for%20some%20design%20help%20%E2%80%94%20branding%2C%20social%20media%2C%20packaging%20%E2%80%94%20let's%20chat!%20%F0%9F%98%8A" class="dm-link instagram" title="Message me on Instagram" target="_blank">
+                            <a href="https://ig.me/m/designer_kunshi?text=Hey!%20%F0%9F%91%8B%20I%20love%20your%20work.%20I%E2%80%99m%20looking%20for%20some%20design%20help%20%E2%80%94%20branding%2C%20social%20media%2C%20packaging%20%E2%80%94%20let's%20chat!%20%F0%9F%98%8A" class="dm-link instagram" title="Message me on Instagram" target="_blank">
                                 <div class="dm-icon">
                                     <i class="fab fa-instagram"></i>
                                 </div>
                                 <div class="dm-text">
                                     <h4>Instagram DM</h4>
-                                    <p>@designer.kunshi</p>
+                                    <p>@designer_kunshi</p>
                                     <span class="dm-action">Send a message <i class="fas fa-arrow-right"></i></span>
                                 </div>
                             </a>
@@ -477,17 +488,46 @@
 
     <!-- Floating Social Media Buttons -->
     <div class="floating-social">
+        <div class="back-to-top" id="backToTop">
+            <i class="fas fa-arrow-up"></i>
+        </div>
         <a href="https://wa.link/gptr4p" class="whatsapp" target="_blank" aria-label="Contact on WhatsApp">
             <i class="fab fa-whatsapp"></i>
         </a>
-        <a href="https://instagram.com/designer.kunshi" class="instagram" target="_blank" aria-label="Follow on Instagram">
+        <a href="https://instagram.com/designer_kunshi" class="instagram" target="_blank" aria-label="Follow on Instagram">
             <i class="fab fa-instagram"></i>
         </a>
     </div>
 
+    <script src="loader.js"></script>
     <script src="script.js"></script>
     <script src="typing-animation.js"></script>
     <script src="image-protection.js"></script>
     <script src="smooth-navigation.js"></script>
+    <script>
+        // Back to top button functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTopButton = document.getElementById('backToTop');
+            
+            // Show button when user scrolls down 300px
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+            
+            // Scroll to top when button is clicked
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+
+        });
+    </script>
 </body>
 </html>

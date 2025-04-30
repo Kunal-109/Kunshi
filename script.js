@@ -11,65 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Greeting animation
-    const greetingElement = document.getElementById('greeting');
-    if (greetingElement) {
-        const greetings = [
-            "Hello",
-            "Hola",
-            "Bonjour",
-            "Hallo",
-            "Ciao",
-            "你好",
-            "こんにちは",
-            "안녕하세요",
-            "مرحبا",
-            "Olá",
-            "Здравствуйте",
-            "হ্যালো / নমস্কার",
-            "سلام",
-            "Merhaba",
-            "Jambo",
-            "สวัสดี",
-            "Γειά σου",
-            "שלום",
-            "Xin chào",
-            "नमस्ते"
-        ];
-        
-        let currentIndex = 0;
-        
-        // Function to animate greeting change
-        function changeGreeting() {
-            // Fade out current greeting
-            greetingElement.style.animation = 'fadeOut 0.5s forwards';
-            
-            // After fade out, change text and fade in
-            setTimeout(() => {
-                currentIndex = (currentIndex + 1) % greetings.length;
-                greetingElement.textContent = greetings[currentIndex];
-                greetingElement.style.animation = 'fadeIn 0.5s forwards';
-                
-                // If we've reached नमस्ते (the last greeting), pause longer
-                if (currentIndex === greetings.length - 1) {
-                    clearInterval(intervalId);
-                    // Restart the cycle after a longer pause (6 seconds)
-                    setTimeout(() => {
-                        currentIndex = 0; // Reset to Hello
-                        greetingElement.style.animation = 'fadeOut 0.5s forwards';
-                        setTimeout(() => {
-                            greetingElement.textContent = greetings[currentIndex];
-                            greetingElement.style.animation = 'fadeIn 0.5s forwards';
-                            intervalId = setInterval(changeGreeting, 2500); // Resume normal cycle
-                        }, 500);
-                    }, 6000);
-                }
-            }, 500);
-        }
-        
-        // Start animation cycle
-        let intervalId = setInterval(changeGreeting, 2500); // Change every 2.5 seconds
-    }
+    // Greeting animation removed - now handled by typing-animation.js
 
     // Mobile menu toggle
     const menuToggle = document.getElementById('menuToggle');

@@ -1,0 +1,15 @@
+Unused Files That Can Be Deleted:
+
+1. greeting.js - Not used in any HTML file, functionality is handled by typing-animation.js
+2. greeting-simple.js - Not used in any HTML file, functionality is handled by typing-animation.js
+
+Redundant Configuration Files (Keep only one based on your hosting provider):
+If using Vercel:
+- Keep: vercel.json, next.config.js
+- Delete: netlify.toml, _redirects
+
+If using Netlify:
+- Keep: netlify.toml, _redirects
+- Delete: vercel.json, next.config.js
+
+Note: These configuration files serve similar purposes but are specific to different hosting platforms.

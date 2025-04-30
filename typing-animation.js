@@ -1,35 +1,23 @@
-// Simple Word Display Animation
+// Optimized Typing Animation that starts when scrolled to section
 document.addEventListener('DOMContentLoaded', function() {
     const textElement = document.getElementById('typing-text');
     
     if (textElement) {
+        // Reduced list to most common greetings to improve performance
         const greetings = [
             "Hello",
             "Hola",
             "Bonjour",
-            "Hallo",
             "Ciao",
             "你好",
             "こんにちは",
             "안녕하세요",
-            "مرحبا",
-            "Olá",
-            "Здравствуйте",
-            "হ্যালো",
-            "سلام",
-            "Merhaba",
-            "Jambo",
-            "สวัสดี",
-            "Γειά σου",
-            "שלום",
-            "Xin chào",
             "नमस्ते"
         ];
         
         let currentIndex = 0;
-        
-        // Variable to store the interval ID so we can clear it later
         let intervalId;
+        let animationStarted = false;
         
         // Function to change the greeting
         function changeGreeting() {
@@ -43,34 +31,62 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Check if we've reached the last greeting
                 if (currentIndex >= greetings.length - 1) {
-                    // Set to the last greeting ("नमस्ते")
+                    // Set to the last greeting
                     currentIndex = greetings.length - 1;
                     textElement.textContent = greetings[currentIndex];
-                    
-                    // Fade in the last greeting
                     textElement.style.opacity = 1;
-                    
-                    // Stop the interval
                     clearInterval(intervalId);
                 } else {
                     // Not the last greeting yet, continue as normal
                     textElement.textContent = greetings[currentIndex];
-                    
-                    // Fade in
                     textElement.style.opacity = 1;
                 }
-            }, 1000); // Time for fade out
+            }, 500); // Reduced time for better performance
         }
         
-        // Set initial greeting
-        textElement.textContent = greetings[0];
-        textElement.style.opacity = 1;
-        
-        // Add transition for smooth fade effect
+        // Initialize the text element
+        textElement.textContent = "";
+        textElement.style.opacity = 0;
         textElement.style.transition = "opacity 0.1s ease";
         
-        // Change greeting every 2 seconds (2000ms)
-        // Note: Adjusted from 250ms to 2000ms to match the comment and provide smoother transitions
-        intervalId = setInterval(changeGreeting, 180);
+        // Function to start the animation
+        function startAnimation() {
+            if (animationStarted) return;
+            textElement.textContent = greetings[0];
+            textElement.style.opacity = 1;
+            intervalId = setInterval(changeGreeting, 200); // Slightly slower for better readability
+            animationStarted = true;
+        }
+        
+        // Optimized function to check if element is in viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8 &&
+                rect.bottom >= 0
+            );
+        }
+        
+        // Throttled scroll handler for better performance
+        let scrollTimeout;
+        function throttledCheckScroll() {
+            if (scrollTimeout) return;
+            
+            scrollTimeout = setTimeout(() => {
+                if (isInViewport(textElement)) {
+                    startAnimation();
+                    window.removeEventListener('scroll', throttledCheckScroll);
+                }
+                scrollTimeout = null;
+            }, 100);
+        }
+        
+        // Add scroll event listener with throttling
+        window.addEventListener('scroll', throttledCheckScroll);
+        
+        // Check immediately in case the element is already in viewport
+        if (isInViewport(textElement)) {
+            startAnimation();
+        }
     }
 });

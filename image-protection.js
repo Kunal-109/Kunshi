@@ -1,5 +1,5 @@
 /**
- * Image Protection Script
+ * Image Protection Script - Optimized
  * Prevents common methods of image downloading
  */
 
@@ -28,42 +28,4 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
     });
-
-    // Add invisible overlay on images to make them harder to download
-    const addOverlays = function() {
-        const images = document.querySelectorAll('.portfolio-image img, .gallery-item img, .hero-image img, .about-image img');
-        
-        images.forEach(function(img) {
-            // Only add overlay if it doesn't already have one
-            if (!img.parentNode.querySelector('.image-overlay')) {
-                const overlay = document.createElement('div');
-                overlay.className = 'image-overlay';
-                overlay.style.position = 'absolute';
-                overlay.style.top = '0';
-                overlay.style.left = '0';
-                overlay.style.width = '100%';
-                overlay.style.height = '100%';
-                overlay.style.zIndex = '10';
-                
-                // Make sure parent has position relative
-                if (window.getComputedStyle(img.parentNode).position !== 'relative') {
-                    img.parentNode.style.position = 'relative';
-                }
-                
-                img.parentNode.appendChild(overlay);
-            }
-        });
-    };
-
-    // Add overlays when page loads
-    addOverlays();
-    
-    // Add overlays again when portfolio items are generated
-    if (typeof generatePortfolioItems === 'function') {
-        const originalGenerate = generatePortfolioItems;
-        generatePortfolioItems = function() {
-            originalGenerate();
-            setTimeout(addOverlays, 500);
-        };
-    }
 });
