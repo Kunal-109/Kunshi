@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khushi | Portfolio</title>
+    <link rel="icon" href="images/Other images/logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <meta name="robots" content="noindex,nofollow">
+    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:">
+</head>
+<body>
+    <!-- Enhanced Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <img src="images/Other images/logo.png" alt="Logo" class="loader-logo">
+            <div class="loader-text">LOADING...</div>
+        </div>
+        <div class="loader-brand">Khushi</div>
+    </div>
+    
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/" class="logo">
+                    <img src="images/Other images/logo.png" alt="Logo" class="logo-img">
+                    <span class="logo-text">Khushi</span>
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="/">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#experience">Experience</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Portfolio Filter Section -->
+    <section class="portfolio-filter-section">
+        <!-- Pattern Decoration -->
+        <div class="pattern-decoration pattern-top-right"></div>
+        <div class="pattern-decoration pattern-bottom-left"></div>
+        
+        <div class="container">
+            <div class="section-header portfolio-header">
+                <h2>Explore My Work</h2>
+                <p class="section-subtitle">Filter by category to find specific projects</p>
+            </div>
+            
+            <div class="filter-container">
+                <div class="portfolio-filters">
+                    <button class="filter-btn active" data-filter="all">All Projects</button>
+                    <!-- Category buttons are auto-inserted from images folders -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Grid -->
+    <section class="portfolio-grid-section">
+        <!-- Pattern Decoration -->
+        <div class="pattern-decoration pattern-center-right"></div>
+        <div class="pattern-decoration pattern-center-left"></div>
+        
+        <div class="container">
+            <div class="portfolio-grid" id="portfolioGrid">
+                <!-- Loading state -->
+                <div class="portfolio-item" data-category="loading">
+                    <div class="portfolio-image">
+                        <div class="loading-container">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Loading amazing projects...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Empty state (will be shown/hidden via JS) -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>No projects found</h3>
+                <p>No projects match your current filter. Try selecting a different category.</p>
+                <button class="btn btn-primary reset-filter-btn">Show All Projects</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Modal -->
+    <div class="project-modal" id="projectModal">
+        <div class="modal-content">
+            <span class="close-modal" title="Close Image">&times;</span>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be loaded dynamically -->
+            </div>
+            <div class="modal-navigation">
+                <button class="nav-btn prev-btn" id="prevProject">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn next-btn" id="nextProject">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <section class="portfolio-cta">
+        <!-- Pattern Decoration -->
+        <div class="pattern-decoration pattern-top-right"></div>
+        <div class="pattern-decoration pattern-bottom-left"></div>
+        
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Take the Next Step?</h2>
+                <p>I’m excited to bring my design skills and creative thinking to a forward thinking organization.</p>
+                <a href="/#contact" class="btn">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="/"><img src="images/Other images/logo.png" alt="Logo" class="footer-logo-img"></a>
+                </div>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#experience">Experience</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2025 Khushi. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration variables
+        const baseImagePath = 'images/';
+        const excludedFolders = new Set(['Featured', 'Other images']);
+        const portfolioFolders = [
+            { name: 'Creative Design', count: 3, ext: '.jpg' },
+            { name: 'Hotel Menu', count: 2, ext: '.jpg' },
+            { name: 'Logo and Bento Box', count: 10, ext: '.png' },
+            { name: 'Magzine Cover', count: 6, ext: '.jpg' },
+            { name: 'Poster', count: 4, ext: '.jpg' },
+            { name: 'Social Media Post', count: 47, ext: '.jpg', missingIndices: [44] }
+        ];
+        let currentCategory = 'all';
+        let currentImageIndex = 0;
+        let visibleItems = [];
+
+        function slugify(name) {
+            return name.trim().replace(/\s+/g, '-');
+        }
+
+        function formatCategoryName(folderName) {
+            return folderName.replace(/\s+/g, ' ').trim();
+        }
+
+        function buildCategoryMeta(folderName) {
+            return {
+                id: slugify(folderName),
+                folderName,
+                title: formatCategoryName(folderName)
+            };
+        }
+
+        function getConfiguredFolders() {
+            return portfolioFolders.filter(folder => !excludedFolders.has(folder.name));
+        }
+
+        function collectFolderImages(folderName, maxCount, ext, missingIndices = []) {
+            const images = [];
+            const missingSet = new Set(missingIndices);
+
+            for (let imageNumber = 1; imageNumber <= maxCount; imageNumber++) {
+                if (missingSet.has(imageNumber)) {
+                    continue;
+                }
+
+                images.push({
+                    imageNumber,
+                    imagePath: `${baseImagePath}${folderName}/Post (${imageNumber})${ext}`
+                });
+            }
+
+            return images;
+        }
+
+        async function buildPortfolioCategories() {
+            const folders = getConfiguredFolders();
+            const categories = [];
+
+            for (const folder of folders) {
+                const images = collectFolderImages(folder.name, folder.count, folder.ext, folder.missingIndices || []);
+                if (images.length === 0) {
+                    continue;
+                }
+
+                categories.push({
+                    ...buildCategoryMeta(folder.name),
+                    images
+                });
+            }
+
+            return categories;
+        }
+
+        function renderFilterButtons(categories) {
+            const filtersContainer = document.querySelector('.portfolio-filters');
+            if (!filtersContainer) {
+                return;
+            }
+
+            const allButton = filtersContainer.querySelector('.filter-btn[data-filter="all"]');
+            filtersContainer.innerHTML = '';
+            if (allButton) {
+                allButton.classList.add('active');
+                filtersContainer.appendChild(allButton);
+            }
+
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'filter-btn';
+                button.setAttribute('data-filter', category.id);
+                button.textContent = category.title;
+                filtersContainer.appendChild(button);
+            });
+        }
+
+        function setupFilterEvents() {
+            const filtersContainer = document.querySelector('.portfolio-filters');
+            if (!filtersContainer) {
+                return;
+            }
+
+            filtersContainer.addEventListener('click', function(event) {
+                const button = event.target.closest('.filter-btn');
+                if (!button) {
+                    return;
+                }
+
+                filtersContainer.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+
+                const category = button.getAttribute('data-filter');
+                filterPortfolio(category);
+            });
+        }
+
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        
+        // Function to generate portfolio items
+        async function generatePortfolioItems() {
+            const portfolioGrid = document.getElementById('portfolioGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (!portfolioGrid) {
+                console.error('Portfolio grid element not found!');
+                return;
+            }
+
+            portfolioGrid.innerHTML = `
+                <div class="portfolio-item" data-category="loading">
+                    <div class="portfolio-image">
+                        <div class="loading-container">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Loading amazing projects...</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const configuredCategories = getConfiguredFolders().map(folder => buildCategoryMeta(folder.name));
+            renderFilterButtons(configuredCategories);
+
+            const categories = await buildPortfolioCategories();
+
+            portfolioGrid.innerHTML = ''; // Clear existing items
+
+            // Create an array to hold all portfolio items before adding to DOM
+            let allPortfolioItems = [];
+            let totalItems = 0;
+
+            // Loop through discovered categories and create items from existing Post (n) files
+            for (const category of categories) {
+                for (const image of category.images) {
+                    const portfolioItem = document.createElement('div');
+                    portfolioItem.className = 'portfolio-item';
+                    portfolioItem.setAttribute('data-category', category.id);
+                    portfolioItem.setAttribute('data-index', totalItems);
+                    totalItems++;
+
+                    portfolioItem.innerHTML = `
+                        <div class="portfolio-image" data-image="${image.imagePath}" data-title="${category.title} #${image.imageNumber}" data-category="${category.id}">
+                            <img src="${image.imagePath}" alt="${category.title} Design ${image.imageNumber}" 
+                                 onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f8f8f8;\\'><div style=\\'text-align:center;padding:20px;\\'><div style=\\'font-size:16px;margin-bottom:5px;color:#333;\\'>${category.title} #${image.imageNumber}</div><div style=\\'font-size:12px;color:#777;\\'>Image not found</div></div></div>';">
+                        </div>
+                    `;
+
+                    allPortfolioItems.push(portfolioItem);
+                }
+            }
+
+            // Shuffle all portfolio items across categories for a completely random order
+            shuffleArray(allPortfolioItems);
+
+            // Append all shuffled items to the grid
+            allPortfolioItems.forEach(item => {
+                portfolioGrid.appendChild(item);
+            });
+
+            // Add event listeners to portfolio images
+            document.querySelectorAll('.portfolio-image').forEach(image => {
+                image.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const imageSrc = this.getAttribute('data-image');
+                    const itemIndex = visibleItems.indexOf(this.parentNode);
+                    openModal(imageSrc, this.getAttribute('data-title'), this.getAttribute('data-category'), itemIndex);
+                });
+            });
+ 
+            // Initial filter to show all projects
+            filterPortfolio('all');
+
+            if (allPortfolioItems.length === 0 && emptyState) {
+                emptyState.style.display = 'block';
+            }
+        }
+
+        // Filter function
+        function filterPortfolio(category) {
+            const items = document.querySelectorAll('.portfolio-item');
+            const emptyState = document.getElementById('emptyState');
+            
+            currentCategory = category;
+            visibleItems = [];
+            let visibleCount = 0;
+            
+            // First collect all visible items
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    visibleItems.push(item);
+                    visibleCount++;
+                }
+            });
+            
+            // Shuffle the visible items for a random order within the filter
+            shuffleArray(visibleItems);
+            
+            // Now display or hide items
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Visible items count (kept for internal use)
+            console.log(`Visible projects: ${visibleCount}`);
+            
+            // Show/hide empty state
+            if (visibleCount === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+        }
+
+        // Modal functions
+        function openModal(imageSrc, title, category, itemIndex) {
+            const modal = document.getElementById('projectModal');
+            const modalBody = document.getElementById('modalBody');
+            const prevBtn = document.getElementById('prevProject');
+            const nextBtn = document.getElementById('nextProject');
+            
+            currentImageIndex = itemIndex;
+            
+            // Set the category as a data attribute on the modal body for special styling
+            modalBody.setAttribute('data-category', category.replace(/ /g, '-'));
+            
+            updateModalContent(imageSrc, title);
+            
+            modal.style.display = 'flex';
+            
+            // Setup navigation buttons
+            setupModalNavigation(prevBtn, nextBtn);
+            
+            // Close modal when clicking the X
+            const closeButton = document.querySelector('.close-modal');
+            closeButton.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Close modal when pressing Escape key
+            window.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    modal.style.display = 'none';
+                }
+                
+                // Navigate with arrow keys
+                if (modal.style.display === 'flex') {
+                    if (e.key === 'ArrowRight') {
+                        navigateToNextItem();
+                    } else if (e.key === 'ArrowLeft') {
+                        navigateToPrevItem();
+                    }
+                }
+            });
+        }
+        
+        function updateModalContent(imageSrc, title) {
+            const modalBody = document.getElementById('modalBody');
+            const category = modalBody.getAttribute('data-category');
+            
+            // Determine if this is an A4 poster for special handling
+            const isA4Poster = category === 'A4-size-Posters';
+            
+            modalBody.innerHTML = `
+                <div class="modal-image">
+                    <img src="${imageSrc}" alt="${title}" 
+                         ${isA4Poster ? 'class="a4-poster"' : ''}
+                         onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;background:#f0f0f0;\\'><div style=\\'text-align:center;padding:20px;\\'><div style=\\'font-size:18px;color:#666;margin-bottom:10px;\\'>Image could not be loaded</div><div style=\\'font-size:14px;color:#999;\\'>Please try again later</div></div></div>';">
+                </div>
+                <div class="modal-title">${title}</div>
+            `;
+        }
+        
+        function setupModalNavigation(prevBtn, nextBtn) {
+            // Remove existing event listeners
+            prevBtn.replaceWith(prevBtn.cloneNode(true));
+            nextBtn.replaceWith(nextBtn.cloneNode(true));
+            
+            // Get fresh references
+            const newPrevBtn = document.getElementById('prevProject');
+            const newNextBtn = document.getElementById('nextProject');
+            
+            // Add new event listeners
+            newPrevBtn.addEventListener('click', navigateToPrevItem);
+            newNextBtn.addEventListener('click', navigateToNextItem);
+        }
+        
+        function navigateToPrevItem() {
+            if (visibleItems.length === 0) return;
+            
+            currentImageIndex = (currentImageIndex - 1 + visibleItems.length) % visibleItems.length;
+            navigateToItem(currentImageIndex);
+        }
+        
+        function navigateToNextItem() {
+            if (visibleItems.length === 0) return;
+            
+            currentImageIndex = (currentImageIndex + 1) % visibleItems.length;
+            navigateToItem(currentImageIndex);
+        }
+        
+        function navigateToItem(index) {
+            const item = visibleItems[index];
+            if (!item) return;
+            
+            const portfolioImage = item.querySelector('.portfolio-image');
+            const imageSrc = portfolioImage.getAttribute('data-image');
+            const title = portfolioImage.getAttribute('data-title');
+            
+            updateModalContent(imageSrc, title);
+        }
+
+        // Mobile menu toggle
+        function setupMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    
+                    // Toggle between hamburger and close icon
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('fa-bars')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            // Close menu when clicking a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                    
+                    // Reset icon
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+        }
+
+        // Initialize the portfolio
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Setup mobile menu
+            setupMobileMenu();
+
+            setupFilterEvents();
+
+            // Generate portfolio items with initial settings
+            await generatePortfolioItems();
+            
+            // Add event listener to reset filter button
+            document.querySelector('.reset-filter-btn').addEventListener('click', function() {
+                // Reset to "All Projects" filter
+                const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+                allButton.click();
+            });
+        });
+    </script>
+    <!-- Floating Social Media Buttons -->
+    <div class="floating-social">
+        <div class="back-to-top" id="backToTop">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+        <a href="https://wa.link/gptr4p" class="whatsapp" target="_blank" aria-label="Contact on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://instagram.com/designer_Khushi" class="instagram" target="_blank" aria-label="Follow on Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
+
+    <script src="loader.js"></script>
+    <script src="image-protection.js"></script>
+    <script src="smooth-navigation.js"></script>
+    <script>
+        // Back to top button functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTopButton = document.getElementById('backToTop');
+            
+            // Show button when user scrolls down 300px
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+            
+            // Scroll to top when button is clicked
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+
+        });
+    </script>
+</body>
+</html>
